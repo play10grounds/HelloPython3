@@ -34,3 +34,8 @@ select * from sungjuk where name = 'abc123';
 
 -- 성적 데이터 중 학생번호로 검색해서 모두 조회
 select * from sungjuk where sjno = 1;
+
+-- 성적 데이터 총 갯수 조회
+-- select count(*) total from sungjuk;
+-- select count(name) total from sungjuk;
+select count(sjno) total from sungjuk;
