@@ -42,6 +42,18 @@ def showSungJuk():
         result += f'이름: {sj[0]}, 국어: {sj[1]}, 영어: {sj[2]}, 수학: {sj[3]}\n'
     print(result)
 
+# 학생 이름으로 성적데이터 조회후 출력
+def showOneSungJuk():
+    name = input('조회할 학생 이름은? ')
+    result = '데이터가 존재하지 않아요!!'
+    sj = readOneSungJuk(name)
+    if sj:   # 조회한 데이터가 존재한다면
+        result = (f'이름: {sj[1]}, 국어: {sj[2]}, 영어: {sj[3]}, 수학: {sj[4]}\n'
+                  f'총점: {sj[5]}, 평균: {sj[6]:.1f}, 학점: {sj[7]}')
+    print(result)
+
+# ------------------------------
+
 # 성적 데이터 총 갯수 조회
 def getTotalSungJuk():
     sql = 'select count(sjno) + 1 total from sungjuk'
@@ -68,7 +80,41 @@ def computeSungJuk(sj):
 
 # 처리된 성적데이터를 테이블에 저장
 def newSungJuk(sj):
-    pass
+    sql = 'insert into sungjuk (name, kor, eng, mat, tot, avg, grd) \
+           values (?,?,?,?, ?,?,?)'
+    conn = sqlite3.connect('db/python.db')
+    cursor = conn.cursor()
+    params = (sj[0],sj[1],sj[2],sj[3],sj[4],sj[5],sj[6])
+    cursor.execute(sql, params)
+    print(cursor.rowcount, '건의 데이터 추가됨!')
+    conn.commit()
+    cursor.close()
+    conn.close()
 
+# 성적 데이터 전체 조회
 def readAllSungJuk():
-    pass
+    sql = 'select name,kor,eng,mat from sungjuk'
+    conn = sqlite3.connect('db/python.db')
+    cursor = conn.cursor()
+    cursor.execute(sql)
+    sjs = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return sjs
+
+# 학생 한명의 성적 상세 조회
+def readOneSungJuk(name):
+    sql = 'select * from sungjuk where name = ?'
+    conn = sqlite3.connect('db/python.db')
+    cursor = conn.cursor()
+    params = (name,)
+    cursor.execute(sql, params)
+    sj = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    return sj
+
+
+
+
+
