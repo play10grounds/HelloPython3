@@ -172,5 +172,11 @@ class EmpService:
     def modify_emp(self):
         pass
 
-    def remove_emp(self):
-        pass
+    @staticmethod
+    def remove_emp():
+        empid = input('삭제할 사원의 사원번호는? ')
+        result = '데이터가 존재하지 않아요!!'
+        cnt = empdao.delete_emp(empid)
+        if cnt > 0:
+            result = f'{cnt}건의 데이터가 삭제됨!!'
+        print(result)
